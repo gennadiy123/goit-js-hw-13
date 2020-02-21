@@ -5,8 +5,8 @@ export default function(search, current, callback) {
     .then(data => data.json())
     .then(data => callback(data))
     .then(() =>
-      window.scrollTo({
-        top: document.body.scrollHeight,
+      window.scrollBy({
+        top: window.innerHeight,
         behavior: 'smooth',
       }),
     )
