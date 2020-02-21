@@ -3,38 +3,36 @@ import template from './templates.hbs';
 import search from './fetch';
 let currentPage = 0;
 
-const input = document.querySelector('#input-id');
+document.querySelector('body').insertAdjacentHTML(
+  'afterbegin',
+  `<form class="search-form" id="search-form">
+<input type="text" name="query" autocomplete="off" placeholder="Search images..." />
+</form>`,
+);
+
+const currentInput = document.querySelector('#search-form');
 const classBtn = document.querySelector('#btn-load-more');
 const loadList = document.querySelector('#load-list');
+const input = document.querySelector('input');
+
 classBtn.addEventListener('click', onInput);
-input.addEventListener('keydown', onKeyDown);
+currentInput.addEventListener('submit', onKeyDown);
 
 function parseData(data) {
-    const container = template(data);
-    // loadList.innerHTML += container;
-    loadList.insertAdjacentHTML('beforeend', container);
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
+  const container = template(data);
+  loadList.insertAdjacentHTML('beforeend', container);
 }
 
-function onInput(event) {
-    search(input.value, ++currentPage, parseData);
-    
-  }
+function onInput() {
+  search(input.value, ++currentPage, parseData);
+}
 
-  function onKeyDown(event) {
-    if(event.key === 'Enter') {
-        event.preventDefault();
-        search(input.value, ++currentPage, parseData);
-        clearResults()
-    }
-    
-    
-  }
+function onKeyDown() {
+  event.preventDefault();
+  search(input.value, ++currentPage, parseData);
+  clearResults();
+}
 
-  function clearResults() {
-    loadList.innerHTML = '';
-  }
-  
+function clearResults() {
+  loadList.innerHTML = '';
+}
